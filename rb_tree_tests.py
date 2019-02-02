@@ -2,8 +2,8 @@ import unittest
 import random
 from datetime import datetime
 
-from rb_tree import RedBlackTree, Node, BLACK, RED, NIL
-NIL_LEAF = RedBlackTree.NIL_LEAF
+from rb_tree import RBTree, Node, BLACK, RED, NIL
+NIL_LEAF = RBTree.NIL_LEAF
 
 
 class RbTreeTests(unittest.TestCase):
@@ -11,24 +11,24 @@ class RbTreeTests(unittest.TestCase):
     def test_find_node(self):
         """ Use the tree we get from the test_build function
             and test the find function on each node"""
-        rb_tree = RedBlackTree()
-        rb_tree.add(2)
+        rb_tree = RBTree()
+        rb_tree.add_node(2)
         node_2 = rb_tree.root
-        rb_tree.add(1)
+        rb_tree.add_node(1)
         node_1 = rb_tree.root.left
-        rb_tree.add(4)
+        rb_tree.add_node(4)
         node_4 = rb_tree.root.right
-        rb_tree.add(5)
+        rb_tree.add_node(5)
         node_5 = node_4.right
-        rb_tree.add(9)
+        rb_tree.add_node(9)
         node_9 = node_5.right
-        rb_tree.add(3)
+        rb_tree.add_node(3)
         node_3 = node_4.left
-        rb_tree.add(6)
+        rb_tree.add_node(6)
         node_6 = node_9.left
-        rb_tree.add(7)
+        rb_tree.add_node(7)
         node_7 = node_5.right
-        rb_tree.add(15)
+        rb_tree.add_node(15)
         node_15 = node_9.right
         """
                             ___5B___
@@ -64,7 +64,7 @@ class RbTreeTests(unittest.TestCase):
                     -10, 20 to BLACK
         :return:
         """
-        tree = RedBlackTree()
+        tree = RBTree()
         root = Node(value=10, color=BLACK, parent=None)
         # LEFT SUBTREE
         node_m10 = Node(value=-10, color=RED, parent=root) #OK
@@ -88,7 +88,7 @@ class RbTreeTests(unittest.TestCase):
         root.right = node_20 #OK
 
         tree.root = root
-        tree.add(4)
+        tree.add_node(4)
         """
                     _____10B_____                                     _____10B_____
                __-10R__        __20R__                           __-10R__        __20R__
@@ -120,7 +120,7 @@ class RbTreeTests(unittest.TestCase):
         self.assertEqual(node_20.color, BLACK)
 
     def test_recoloring_two(self):
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
         root = Node(value=10, color=BLACK, parent=None, left=NIL_LEAF, right=NIL_LEAF)
         # left subtree
         node_m10 = Node(value=-10, color=RED, parent=root, left=NIL_LEAF, right=NIL_LEAF)
@@ -143,7 +143,7 @@ class RbTreeTests(unittest.TestCase):
         root.left = node_m10
         root.right = node_20
         rb_tree.root = root
-        rb_tree.add(19)
+        rb_tree.add_node(19)
 
 
         """
@@ -182,7 +182,7 @@ class RbTreeTests(unittest.TestCase):
         self.assertEqual(rb_tree.root.color, BLACK)
 
     def test_right_rotation(self):
-        tree = RedBlackTree()
+        tree = RBTree()
         root = Node(value=10, color=BLACK, parent=None)
 
         # LEFT SUBTREE
@@ -199,7 +199,7 @@ class RbTreeTests(unittest.TestCase):
         root.right = node_20
 
         tree.root = root
-        tree.add(13)
+        tree.add_node(13)
 
         """
                   ____10B____                                           ____10B____
@@ -230,7 +230,7 @@ class RbTreeTests(unittest.TestCase):
         self.assertEqual(node_13.right, NIL_LEAF)
 
     def test_left_rotation_no_sibling(self):
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
         root = Node(value=10, color=BLACK, parent=None, left=NIL_LEAF, right=NIL_LEAF)
         # LEFT SUBTREE
         node_7 = Node(value=7, color=BLACK, parent=root, left=NIL_LEAF, right=NIL_LEAF)
@@ -243,7 +243,7 @@ class RbTreeTests(unittest.TestCase):
         root.right = rightest
 
         rb_tree.root = root
-        rb_tree.add(9)
+        rb_tree.add_node(9)
         """
                  -->     10B                                10B
         ORIGINAL -->  7B    20B  --LEFT ROTATION-->       8B   20B
@@ -276,7 +276,7 @@ class RbTreeTests(unittest.TestCase):
         self.assertEqual(node_7.right, NIL_LEAF)
 
     def test_right_rotation_no_sibling_left_subtree(self):
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
         root = Node(value=10, color=BLACK, parent=None, left=NIL_LEAF, right=NIL_LEAF)
         # LEFT SUBTREE
         node_m10 = Node(value=-10, color=BLACK, parent=root, left=NIL_LEAF, right=NIL_LEAF)
@@ -290,7 +290,7 @@ class RbTreeTests(unittest.TestCase):
         root.left = node_m10
         root.right = node_20
         rb_tree.root = root
-        rb_tree.add(-12)
+        rb_tree.add_node(-12)
         """
 
 
@@ -329,7 +329,7 @@ class RbTreeTests(unittest.TestCase):
         self.assertEqual(node_m10.right, NIL_LEAF)
 
     def test_left_right_rotation_no_sibling(self):
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
         root = Node(value=10, color=BLACK, parent=None, left=NIL_LEAF, right=NIL_LEAF)
         # LEFT PART
         node_m10 = Node(value=-10, color=BLACK, parent=root, left=NIL_LEAF, right=NIL_LEAF)
@@ -345,7 +345,7 @@ class RbTreeTests(unittest.TestCase):
         root.right=node_20
 
         rb_tree.root = root
-        rb_tree.add(17)
+        rb_tree.add_node(17)
         """
                     ___10___                                                     ____10____
                  -10B      20B                                                -10B        20B
@@ -388,7 +388,7 @@ class RbTreeTests(unittest.TestCase):
         self.assertEqual(node_15.right, NIL_LEAF)
 
     def test_right_left_rotation_no_sibling(self):
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
         root = Node(value=10, color=BLACK, parent=None, left=NIL_LEAF, right=NIL_LEAF)
         # LEFT PART
         nodem10 = Node(value=-10, color=BLACK, parent=root, left=NIL_LEAF, right=NIL_LEAF)
@@ -404,7 +404,7 @@ class RbTreeTests(unittest.TestCase):
         root.right = node_20
 
         rb_tree.root = root
-        rb_tree.add(2)
+        rb_tree.add_node(2)
         """
 
             ___10___                                                        ___10___
@@ -444,7 +444,7 @@ class RbTreeTests(unittest.TestCase):
         self.assertEqual(nodem10.right, NIL_LEAF)
 
     def test_recolor_lr(self):
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
         root = Node(value=10, color=BLACK, parent=None)
         # RIGHT SUBTREE
         node_m10 = Node(value=-10, color=RED, parent=root, left=NIL_LEAF, right=NIL_LEAF)
@@ -467,7 +467,7 @@ class RbTreeTests(unittest.TestCase):
         root.left = node_m10
         root.right = node_20
         rb_tree.root = root
-        rb_tree.add(4)
+        rb_tree.add_node(4)
         """
 
                 _________10B_________                                      _________10B_________
@@ -523,8 +523,8 @@ class RbTreeTests(unittest.TestCase):
         self.assertEqual(node_4.color, RED)
 
     def test_functional_test_build_tree(self):
-        rb_tree = RedBlackTree()
-        rb_tree.add(2)
+        rb_tree = RBTree()
+        rb_tree.add_node(2)
         self.assertEqual(rb_tree.root.value, 2)
         self.assertEqual(rb_tree.root.color, BLACK)
         node_2 = rb_tree.root
@@ -533,7 +533,7 @@ class RbTreeTests(unittest.TestCase):
         values = list(rb_tree)
         self.assertEqual(values, expected_values)
 
-        rb_tree.add(1)
+        rb_tree.add_node(1)
         """
             2B
            1R
@@ -546,7 +546,7 @@ class RbTreeTests(unittest.TestCase):
         self.assertEqual(node_1.value, 1)
         self.assertEqual(node_1.color, RED)
 
-        rb_tree.add(4)
+        rb_tree.add_node(4)
         """
             2B
           1R  4R
@@ -561,7 +561,7 @@ class RbTreeTests(unittest.TestCase):
         self.assertEqual(node_4.left, NIL_LEAF)
         self.assertEqual(node_4.right, NIL_LEAF)
 
-        rb_tree.add(5)
+        rb_tree.add_node(5)
         """
             2B                              2B
           1R  4R    ---CAUSES RECOLOR-->  1B  4B
@@ -577,7 +577,7 @@ class RbTreeTests(unittest.TestCase):
         self.assertEqual(node_1.color, BLACK)
         self.assertEqual(node_5.color, RED)
 
-        rb_tree.add(9)
+        rb_tree.add_node(9)
         """
             2B                                           __2B__
           1B  4B        ---CAUSES LEFT ROTATION-->     1B     5B
@@ -604,7 +604,7 @@ class RbTreeTests(unittest.TestCase):
         self.assertEqual(node_5.left.value, 4)
         self.assertEqual(node_5.right.value, 9)
 
-        rb_tree.add(3)
+        rb_tree.add_node(3)
         """
             __2B__                                  __2B__
           1B      5B     ---CAUSES RECOLOR-->     1B      5R
@@ -633,7 +633,7 @@ class RbTreeTests(unittest.TestCase):
         self.assertEqual(node_5.left.value, 4)
         self.assertEqual(node_5.right.value, 9)
 
-        rb_tree.add(6)
+        rb_tree.add_node(6)
         """
         Nothing special
            __2B__
@@ -652,7 +652,7 @@ class RbTreeTests(unittest.TestCase):
         self.assertEqual(node_6.left, NIL_LEAF)
         self.assertEqual(node_6.right, NIL_LEAF)
 
-        rb_tree.add(7)
+        rb_tree.add_node(7)
         """
                    __2B__                                                    __2B__
                  1B      ___5R___             ---LEFT  ROTATION TO-->       1B   ___5R___
@@ -689,7 +689,7 @@ class RbTreeTests(unittest.TestCase):
         self.assertEqual(node_9.right, NIL_LEAF)
         self.assertEqual(node_9.parent.value, 7)
 
-        rb_tree.add(15)
+        rb_tree.add_node(15)
         """
                     __2B__                                         __2B__
                1B    ___5R___                                    1B    ___5R___
@@ -742,7 +742,7 @@ class RbTreeTests(unittest.TestCase):
         self.assertEqual(node_4.right, NIL_LEAF)
 
     def test_right_left_rotation_after_recolor(self):
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
         root = Node(value=10, color=BLACK, parent=None, left=NIL_LEAF, right=NIL_LEAF)
         node_10 = root
 
@@ -764,7 +764,7 @@ class RbTreeTests(unittest.TestCase):
         root.left = node_5
         root.right = node_20
         rb_tree.root = root
-        rb_tree.add(19)
+        rb_tree.add_node(19)
 
         """
                     ____10B____                           ____10B____
@@ -825,7 +825,7 @@ class RbTreeTests(unittest.TestCase):
         self.assertEqual(node_12.right, NIL_LEAF)
 
     def test_right_rotation_after_recolor(self):
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
         root = Node(value=10, color=BLACK, parent=None, left=NIL_LEAF, right=NIL_LEAF)
         node_10 = root
         # left subtree
@@ -848,7 +848,7 @@ class RbTreeTests(unittest.TestCase):
         root.left = node_m10
         root.right = node_20
         rb_tree.root = root
-        rb_tree.add(-22)
+        rb_tree.add_node(-22)
 
         """
 
@@ -911,7 +911,7 @@ class RbTreeTests(unittest.TestCase):
     # ***************TEST DELETIONS***************
 
     def test_deletion_root(self):
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
         root = Node(value=5, color=BLACK, parent=None, left=NIL_LEAF, right=NIL_LEAF)
         left_child = Node(value=3, color=RED, parent=root, left=NIL_LEAF, right=NIL_LEAF)
         right_child = Node(value=8, color=RED, parent=root, left=NIL_LEAF, right=NIL_LEAF)
@@ -942,7 +942,7 @@ class RbTreeTests(unittest.TestCase):
         self.assertEqual(node_3.right, NIL_LEAF)
 
     def test_deletion_root_2_nodes(self):
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
         root = Node(value=5, color=BLACK, parent=None, left=NIL_LEAF, right=NIL_LEAF)
         right_child = Node(value=8, color=RED, parent=root, left=NIL_LEAF, right=NIL_LEAF)
         root.right = right_child
@@ -965,7 +965,7 @@ class RbTreeTests(unittest.TestCase):
         self.assertEqual(root.right, NIL_LEAF)
 
     def test_delete_single_child(self):
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
         root = Node(value=5, color=BLACK, parent=None, left=NIL_LEAF, right=NIL_LEAF)
         left_child = Node(value=1, color=RED, parent=root, left=NIL_LEAF, right=NIL_LEAF)
         right_child = Node(value=6, color=RED, parent=root, left=NIL_LEAF, right=NIL_LEAF)
@@ -992,7 +992,7 @@ class RbTreeTests(unittest.TestCase):
         self.assertEqual(node_1.right, NIL_LEAF)
 
     def test_delete_single_deep_child(self):
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
         root = Node(value=20, color=BLACK, parent=None, left=NIL_LEAF, right=NIL_LEAF)
         # left subtree
         node_10 = Node(value=10, color=BLACK, parent=None, left=NIL_LEAF, right=NIL_LEAF)
@@ -1043,7 +1043,7 @@ class RbTreeTests(unittest.TestCase):
         """
         This must be the easiest deletion yet!
         """
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
         root = Node(value=10, color=BLACK, parent=None, left=NIL_LEAF, right=NIL_LEAF)
         # Left subtree
         node_5 = Node(value=5, color=RED, parent=root, left=NIL_LEAF, right=NIL_LEAF)
@@ -1101,7 +1101,7 @@ class RbTreeTests(unittest.TestCase):
         """
         This must be the easiest deletion yet!
         """
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
         root = Node(value=10, color=BLACK, parent=None, left=NIL_LEAF, right=NIL_LEAF)
         # Left subtree
         node_5 = Node(value=5, color=RED, parent=root, left=NIL_LEAF, right=NIL_LEAF)
@@ -1162,7 +1162,7 @@ class RbTreeTests(unittest.TestCase):
 
     def test_deletion_black_node_black_successor_right_red_child(self):
         """ fuck it i don't even know anymore """
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
         root = Node(value=10, color=BLACK, parent=None, left=NIL_LEAF, right=NIL_LEAF)
         # left subtree
         node_5 = Node(value=5, color=BLACK, parent=root, left=NIL_LEAF, right=NIL_LEAF)
@@ -1219,7 +1219,7 @@ class RbTreeTests(unittest.TestCase):
         self.assertEqual(node_35.right, NIL_LEAF)
 
     def test_deletion_black_node_black_successor_no_child_case_4(self):
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
         root = Node(value=10, color=BLACK, parent=None, left=NIL_LEAF, right=NIL_LEAF)
         # left subtree
         node_m10 = Node(value=-10, color=BLACK, parent=root, left=NIL_LEAF, right=NIL_LEAF)
@@ -1272,7 +1272,7 @@ class RbTreeTests(unittest.TestCase):
         self.assertEqual(node_38.right, NIL_LEAF)
 
     def test_deletion_black_node_no_successor_case_6(self):
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
         root = Node(value=10, color=BLACK, parent=None, left=NIL_LEAF, right=NIL_LEAF)
         # left subtree
         node_m10 = Node(value=-10, color=BLACK, parent=root, left=NIL_LEAF, right=NIL_LEAF)
@@ -1329,7 +1329,7 @@ class RbTreeTests(unittest.TestCase):
         self.assertEqual(node_40.right, NIL_LEAF)
 
     def test_mirror_deletion_black_node_no_successor_case_6(self):
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
         root = Node(value=10, color=BLACK, parent=None, left=NIL_LEAF, right=NIL_LEAF)
         node_12 = Node(value=12, color=BLACK, parent=root, left=NIL_LEAF, right=NIL_LEAF)
         node_5 = Node(value=5, color=BLACK, parent=root, left=NIL_LEAF, right=NIL_LEAF)
@@ -1379,7 +1379,7 @@ class RbTreeTests(unittest.TestCase):
         Delete a node such that case 3 is called, which pushes
         the double black node upwards into a case 1 problem
         """
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
         root = Node(value=10, color=BLACK, parent=None, left=NIL_LEAF, right=NIL_LEAF)
         # left subtree
         node_m10 = Node(value=-10, color=BLACK, parent=root, left=NIL_LEAF, right=NIL_LEAF)
@@ -1422,7 +1422,7 @@ class RbTreeTests(unittest.TestCase):
         which in turn would pass the double black node up into a case 5, which
         will restructure the tree in such a way that a case 6 rotation becomes possible
         """
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
         root = Node(value=10, color=BLACK, parent=None, left=NIL_LEAF, right=NIL_LEAF)
         # left subtree
         node_m30 = Node(value=-30, color=BLACK, parent=root, left=NIL_LEAF, right=NIL_LEAF)
@@ -1540,7 +1540,7 @@ class RbTreeTests(unittest.TestCase):
         which in turn would pass the double black node up into a case 5, which
         will restructure the tree in such a way that a case 6 rotation becomes possible
         """
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
         root = Node(value=50, color=BLACK, parent=None, left=NIL_LEAF, right=NIL_LEAF)
         # left subtree
         node_30 = Node(value=30, color=BLACK, parent=root, left=NIL_LEAF, right=NIL_LEAF)
@@ -1653,7 +1653,7 @@ class RbTreeTests(unittest.TestCase):
         self.assertEqual(node_34.right, NIL_LEAF)
 
     def test_deletion_black_node_successor_case_2_then_4(self):
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
         root = Node(value=10, color=BLACK, parent=None, left=NIL_LEAF, right=NIL_LEAF)
         # left subtree
         node_m10 = Node(value=-10, color=BLACK, parent=root, left=NIL_LEAF, right=NIL_LEAF)
@@ -1751,7 +1751,7 @@ class RbTreeTests(unittest.TestCase):
         self.assertEqual(node_50.right, NIL_LEAF)
 
     def test_mirror_deletion_black_node_successor_case_2_then_4(self):
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
         root = Node(value=20, color=BLACK, parent=None, left=NIL_LEAF, right=NIL_LEAF)
         # left subtree
         node_10 = Node(value=10, color=BLACK, parent=root, left=NIL_LEAF, right=NIL_LEAF)
@@ -1847,7 +1847,7 @@ class RbTreeTests(unittest.TestCase):
         self.assertEqual(node_9.right, NIL_LEAF)
 
     def test_delete_tree_one_by_one(self):
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
         root = Node(value=20, color=BLACK, parent=None, left=NIL_LEAF, right=NIL_LEAF)
         # left subtree
         node_10 = Node(value=10, color=BLACK, parent=root, left=NIL_LEAF, right=NIL_LEAF)
@@ -1981,25 +1981,25 @@ class RbTreeTests(unittest.TestCase):
         https://www.cs.usfca.edu/~galles/visualization/RedBlack.html
         and then see if they're the same
         """
-        rb_tree = RedBlackTree()
-        rb_tree.add(90)
-        rb_tree.add(70)
-        rb_tree.add(43)
+        rb_tree = RBTree()
+        rb_tree.add_node(90)
+        rb_tree.add_node(70)
+        rb_tree.add_node(43)
         rb_tree.remove(70)
-        rb_tree.add(24)
-        rb_tree.add(14)
-        rb_tree.add(93)
-        rb_tree.add(47)
+        rb_tree.add_node(24)
+        rb_tree.add_node(14)
+        rb_tree.add_node(93)
+        rb_tree.add_node(47)
         rb_tree.remove(47)
         rb_tree.remove(90)
-        rb_tree.add(57)
-        rb_tree.add(1)
-        rb_tree.add(60)
-        rb_tree.add(47)
+        rb_tree.add_node(57)
+        rb_tree.add_node(1)
+        rb_tree.add_node(60)
+        rb_tree.add_node(47)
         rb_tree.remove(47)
         rb_tree.remove(1)
         rb_tree.remove(43)
-        rb_tree.add(49)
+        rb_tree.add_node(49)
         """
         well, the results aren't the same, but I'll assume that the algorithms are different
         Nevertheless, what we're left with is a perfectly valid RedBlack Tree, and, I'd argue, even betterly
@@ -2065,9 +2065,9 @@ class RbTreeTests(unittest.TestCase):
         self.assertEqual(node_49.right, NIL_LEAF)
 
     def test_add_0_to_100_delete_100_to_0(self):
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
         for i in range(100):
-            rb_tree.add(i)
+            rb_tree.add_node(i)
             self.assertEqual(rb_tree.count, i+1)
         expected_values = list(range(100))
         values = list(rb_tree)
@@ -2080,9 +2080,9 @@ class RbTreeTests(unittest.TestCase):
         self.assertIsNone(rb_tree.root)
 
     def test_add_delete_0_to_100_delete_0_to_100(self):
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
         for i in range(100):
-            rb_tree.add(i)
+            rb_tree.add_node(i)
             self.assertEqual(rb_tree.count, i+1)
         expected_values = list(range(100))
         values = list(rb_tree)
@@ -2101,20 +2101,20 @@ class RbTreeTests(unittest.TestCase):
     def test_ceil(self):
         # add all the numbers 0-99 step 2
         # i.e 0, 2, 4
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
         for i in range(0, 100, 2):
-            rb_tree.add(i)
+            rb_tree.add_node(i)
         # then search for the ceilings, knowing theyre 1 up
         for i in range(1, 99, 2):
             self.assertEqual(rb_tree.ceil(i), i+1)
 
     def test_ceil_same_value(self):
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
 
-        rb_tree.add(10)
-        rb_tree.add(15)
-        rb_tree.add(20)
-        rb_tree.add(17)
+        rb_tree.add_node(10)
+        rb_tree.add_node(15)
+        rb_tree.add_node(20)
+        rb_tree.add_node(17)
 
         for i in range(11):
             self.assertEqual(rb_tree.ceil(i), 10)
@@ -2128,20 +2128,20 @@ class RbTreeTests(unittest.TestCase):
     def test_floor(self):
         # add all the numbers 0-99 step 2
         # i.e 0, 2, 4
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
         for i in range(0, 100, 2):
-            rb_tree.add(i)
+            rb_tree.add_node(i)
         # then search for the ceilings, knowing theyre 1 up
         for i in range(1, 99, 2):
             self.assertEqual(rb_tree.floor(i), i - 1)
 
     def test_floor_same_value(self):
-        rb_tree = RedBlackTree()
+        rb_tree = RBTree()
 
-        rb_tree.add(10)
-        rb_tree.add(15)
-        rb_tree.add(20)
-        rb_tree.add(17)
+        rb_tree.add_node(10)
+        rb_tree.add_node(15)
+        rb_tree.add_node(20)
+        rb_tree.add_node(17)
 
         for i in range(11, 15):
             self.assertEqual(rb_tree.floor(i), 10)
@@ -2162,9 +2162,9 @@ class RbTreePerformanceTests(unittest.TestCase):
         possible_values = list(range(-100000, 100000))
         elements = [random.choice(possible_values) for _ in range(25000)]
         start_time = datetime.now()
-        tree = RedBlackTree()
+        tree = RBTree()
         for el in elements:
-            tree.add(el)
+            tree.add_node(el)
         time_taken = datetime.now()-start_time
         self.assertTrue(time_taken.seconds < 1)
 
@@ -2175,9 +2175,9 @@ class RbTreePerformanceTests(unittest.TestCase):
         possible_values = list(range(-100000, 100000))
         elements = set([random.choice(possible_values) for _ in range(25000)])
         # fill up the tree
-        tree = RedBlackTree()
+        tree = RBTree()
         for el in elements:
-            tree.add(el)
+            tree.add_node(el)
         start_time = datetime.now()
         for el in elements:
             tree.remove(el)
@@ -2190,17 +2190,17 @@ class RbTreePerformanceTests(unittest.TestCase):
         first_part = elements[:len(elements)//2]
         second_part = elements[len(elements)//2:]
         deletion_part = first_part[len(first_part)//3:(len(first_part)//3)*2]
-        tree = RedBlackTree()
+        tree = RBTree()
         start_time = datetime.now()
 
         # fill up the tree 1/2
         for el in first_part:
-            tree.add(el)
+            tree.add_node(el)
         # delete 1/2 of the tree
         for del_el in deletion_part:
             tree.remove(del_el)
         for el in second_part:
-            tree.add(el)
+            tree.add_node(el)
 
         time_taken = datetime.now()-start_time
         self.assertTrue(time_taken.seconds < 1)
